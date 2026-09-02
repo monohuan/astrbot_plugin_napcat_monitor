@@ -24,7 +24,7 @@ class NapcatMonitorPlugin(Star):
 
     def __init__(self, context: Context, config: dict | None = None):
         super().__init__(context)
-        self.config = config or {}
+        self.config = self._flatten_config(config or {})
         self.monitor_task: asyncio.Task | None = None
         self._stop_event = asyncio.Event()
         self._last_platform_status: dict[str, dict[str, Any]] = {}
@@ -422,6 +422,16 @@ class NapcatMonitorPlugin(Star):
             return str(template).strip()
 
     # ---------------- 配置读取 ----------------
+    @staticmethod
+    def _flatten_config(config: dict) -> dict:
+        flat: dict[str, Any] = {}
+        for key, value in config.items():
+            if isinstance(value, dict):
+                flat.update(value)
+            else:
+                flat[key] = value
+        return flat
+
     def _config(self, key: str, default: Any = None) -> Any:
         return self.config.get(key, default)
 

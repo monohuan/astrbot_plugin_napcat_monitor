@@ -27,25 +27,44 @@ data/plugins/astrbot_plugin_napcat_monitor
 
 ## 配置项（插件配置 / `_conf_schema.json`）
 
+在 WebUI 中，配置按 4 个分组展示：**监控设置 / SMTP 服务器 / 邮件内容 / 高级设置**。
+
+### 监控设置
+
 | 配置项 | 默认值 | 说明 |
 | --- | --- | --- |
-| `target_platform_ids` | 空 | 监控的 `aiocqhttp` 平台 ID，每行或逗号分隔；留空 = 监控全部 |
+| `target_platform_ids` | 空 | 监控的 `aiocqhttp` 平台 ID，每行或逗号分隔，例如 `default`；留空 = 监控全部 |
 | `poll_interval_seconds` | `5` | 轮询连接状态的间隔（秒） |
 | `offline_cooldown_seconds` | `600` | 同一平台相同状态的重复通知冷却（秒） |
 | `notify_recovery` | `true` | 恢复连接后是否也发邮件 |
-| `smtp_host` | 空 | SMTP 服务器地址，如 `smtp.qq.com` |
-| `smtp_port` | `465` | SMTP 端口（465=SSL，587=STARTTLS） |
+
+### SMTP 服务器
+
+| 配置项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `smtp_host` | 空 | SMTP 服务器地址，如 `smtp.qq.com` / `smtp.163.com` / `smtp.gmail.com` |
+| `smtp_port` | `465` | SMTP 端口（465=SSL，587=STARTTLS，25=明文） |
+| `smtp_security` | `ssl` | 加密方式下拉选择：`ssl` / `starttls` / `none` |
 | `smtp_user` | 空 | SMTP 登录账号（通常是发件邮箱） |
 | `smtp_password` | 空 | SMTP 授权码 / 密码 |
-| `smtp_security` | `ssl` | 加密方式：`ssl` / `starttls` / `none` |
 | `smtp_timeout` | `15` | SMTP 连接超时（秒） |
 | `from_name` | 空 | 发件人显示名称，留空则用 `smtp_user` |
-| `admin_emails` | 空 | 收件人邮箱，多个用逗号或换行分隔 |
+
+### 邮件内容
+
+| 配置项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `admin_emails` | 空 | 收件人邮箱，多个用逗号或换行分隔，例如 `admin@qq.com` |
 | `subject_prefix` | `[AstrBot]` | 邮件主题前缀 |
 | `offline_subject_template` | 内置 | 掉线邮件主题模板，占位符 `{platform_id} {status_text} {detail}` |
 | `recovery_subject_template` | 内置 | 恢复邮件主题模板 |
 | `offline_template` | 内置 | 掉线邮件正文模板，占位符含 `{time}` |
 | `recovery_template` | 内置 | 恢复邮件正文模板 |
+
+### 高级设置
+
+| 配置项 | 默认值 | 说明 |
+| --- | --- | --- |
 | `email_retry_times` | `2` | 发送失败后的最大重试次数 |
 | `email_retry_interval` | `5` | 重试间隔（秒） |
 

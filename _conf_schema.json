@@ -1,97 +1,167 @@
 {
-    "target_platform_ids": {
-        "type": "text",
-        "default": "",
-        "description": "要监控的 aiocqhttp 平台 ID。每行或用英文逗号填写一个；留空表示监控全部 OneBot v11/NapCat 实例。"
+    "monitoring": {
+        "description": "监控设置",
+        "type": "object",
+        "items": {
+            "target_platform_ids": {
+                "description": "监控的平台 ID",
+                "type": "text",
+                "default": "",
+                "hint": "要监控的 aiocqhttp（OneBot v11 / NapCat）平台 ID。每行或用英文逗号填写一个，例如 default 或 123456789；留空表示监控全部实例。"
+            },
+            "poll_interval_seconds": {
+                "description": "轮询间隔（秒）",
+                "type": "int",
+                "default": 5,
+                "slider": {
+                    "min": 2,
+                    "max": 300,
+                    "step": 1
+                },
+                "hint": "后台检测 NapCat 连接状态的间隔，建议 5~30 秒。"
+            },
+            "offline_cooldown_seconds": {
+                "description": "重复通知冷却（秒）",
+                "type": "int",
+                "default": 600,
+                "slider": {
+                    "min": 0,
+                    "max": 7200,
+                    "step": 60
+                },
+                "hint": "同一平台相同状态的重复通知冷却时间。设为 0 表示每次状态变化都通知。"
+            },
+            "notify_recovery": {
+                "description": "恢复后也发邮件",
+                "type": "bool",
+                "default": true,
+                "hint": "开启后，NapCat 从离线恢复到在线时也会发送一封邮件通知。"
+            }
+        }
     },
-    "poll_interval_seconds": {
-        "type": "int",
-        "default": 5,
-        "description": "连接状态轮询间隔（秒）"
+    "smtp": {
+        "description": "SMTP 服务器",
+        "type": "object",
+        "items": {
+            "smtp_host": {
+                "description": "SMTP 服务器地址",
+                "type": "string",
+                "default": "",
+                "hint": "发信服务器地址，例如 smtp.qq.com、smtp.163.com、smtp.gmail.com。"
+            },
+            "smtp_port": {
+                "description": "SMTP 端口",
+                "type": "int",
+                "default": 465,
+                "hint": "465 对应 SSL，587 对应 STARTTLS，25 为明文（不推荐）。"
+            },
+            "smtp_security": {
+                "description": "加密方式",
+                "type": "string",
+                "default": "ssl",
+                "options": ["ssl", "starttls", "none"],
+                "labels": ["SSL（通常 465 端口）", "STARTTLS（通常 587 端口）", "无加密（明文，不推荐）"],
+                "hint": "选择与 smtp_port 匹配的加密方式。"
+            },
+            "smtp_user": {
+                "description": "SMTP 登录账号",
+                "type": "string",
+                "default": "",
+                "hint": "通常是发件邮箱地址，例如 you@qq.com。"
+            },
+            "smtp_password": {
+                "description": "SMTP 授权码 / 密码",
+                "type": "string",
+                "default": "",
+                "hint": "多数邮箱需在设置里开启 SMTP 并生成「授权码」填入，而非登录密码。"
+            },
+            "smtp_timeout": {
+                "description": "连接超时（秒）",
+                "type": "int",
+                "default": 15,
+                "slider": {
+                    "min": 5,
+                    "max": 60,
+                    "step": 5
+                },
+                "hint": "SMTP 连接与发送的超时时间。"
+            },
+            "from_name": {
+                "description": "发件人显示名称",
+                "type": "string",
+                "default": "",
+                "hint": "收件人看到的发件人名称，留空则显示 smtp_user 邮箱地址。"
+            }
+        }
     },
-    "offline_cooldown_seconds": {
-        "type": "int",
-        "default": 600,
-        "description": "同一平台相同状态的重复通知冷却时间（秒）"
+    "email": {
+        "description": "邮件内容",
+        "type": "object",
+        "items": {
+            "admin_emails": {
+                "description": "收件人邮箱",
+                "type": "text",
+                "default": "",
+                "hint": "管理员收件邮箱，多个用逗号或换行分隔，例如 admin@qq.com, backup@163.com。"
+            },
+            "subject_prefix": {
+                "description": "邮件主题前缀",
+                "type": "string",
+                "default": "[AstrBot]",
+                "hint": "所有通知邮件主题的前缀，例如 [AstrBot]、[机器人监控]。"
+            },
+            "offline_subject_template": {
+                "description": "掉线邮件主题模板",
+                "type": "text",
+                "default": "NapCat 已断开连接（{platform_id}）",
+                "hint": "掉线通知的主题模板。可用占位符：{platform_id} {status_text} {detail}。"
+            },
+            "recovery_subject_template": {
+                "description": "恢复邮件主题模板",
+                "type": "text",
+                "default": "NapCat 已恢复连接（{platform_id}）",
+                "hint": "恢复通知的主题模板。可用占位符：{platform_id} {status_text} {detail}。"
+            },
+            "offline_template": {
+                "description": "掉线邮件正文模板",
+                "type": "text",
+                "default": "管理员您好，\n\nAstrBot 监控到 NapCat / OneBot v11 平台「{platform_id}」已断开连接，QQ 侧消息暂时可能收不到。\n\n{detail}\n\n时间：{time}",
+                "hint": "掉线通知的正文模板。可用占位符：{platform_id} {status_text} {detail} {time}。"
+            },
+            "recovery_template": {
+                "description": "恢复邮件正文模板",
+                "type": "text",
+                "default": "管理员您好，\n\nAstrBot 监控到 NapCat / OneBot v11 平台「{platform_id}」已恢复连接，QQ 侧消息恢复正常。\n\n{detail}\n\n时间：{time}",
+                "hint": "恢复通知的正文模板。可用占位符：{platform_id} {status_text} {detail} {time}。"
+            }
+        }
     },
-    "notify_recovery": {
-        "type": "bool",
-        "default": true,
-        "description": "NapCat 恢复连接后是否也发送邮件通知"
-    },
-    "smtp_host": {
-        "type": "text",
-        "default": "",
-        "description": "SMTP 服务器地址，例如 smtp.qq.com"
-    },
-    "smtp_port": {
-        "type": "int",
-        "default": 465,
-        "description": "SMTP 端口（465=SSL，587=STARTTLS）"
-    },
-    "smtp_user": {
-        "type": "text",
-        "default": "",
-        "description": "SMTP 登录账号（通常是发件邮箱）"
-    },
-    "smtp_password": {
-        "type": "text",
-        "default": "",
-        "description": "SMTP 授权码/密码"
-    },
-    "smtp_security": {
-        "type": "text",
-        "default": "ssl",
-        "description": "加密方式：ssl（465）/ starttls（587）/ none（明文，不推荐）"
-    },
-    "smtp_timeout": {
-        "type": "int",
-        "default": 15,
-        "description": "SMTP 连接超时（秒）"
-    },
-    "from_name": {
-        "type": "text",
-        "default": "",
-        "description": "发件人显示名称，留空则用 SMTP 账号"
-    },
-    "admin_emails": {
-        "type": "text",
-        "default": "",
-        "description": "管理员收件邮箱，多个用逗号或换行分隔"
-    },
-    "subject_prefix": {
-        "type": "text",
-        "default": "[AstrBot]",
-        "description": "邮件主题前缀"
-    },
-    "offline_subject_template": {
-        "type": "text",
-        "default": "NapCat 已断开连接（{platform_id}）",
-        "description": "掉线邮件主题模板，可用占位符 {platform_id} {status_text} {detail}"
-    },
-    "recovery_subject_template": {
-        "type": "text",
-        "default": "NapCat 已恢复连接（{platform_id}）",
-        "description": "恢复邮件主题模板，可用占位符 {platform_id} {status_text} {detail}"
-    },
-    "offline_template": {
-        "type": "text",
-        "default": "管理员您好，\n\nAstrBot 监控到 NapCat / OneBot v11 平台「{platform_id}」已断开连接，QQ 侧消息暂时可能收不到。\n\n{detail}\n\n时间：{time}",
-        "description": "掉线邮件正文模板，可用占位符 {platform_id} {status_text} {detail} {time}"
-    },
-    "recovery_template": {
-        "type": "text",
-        "default": "管理员您好，\n\nAstrBot 监控到 NapCat / OneBot v11 平台「{platform_id}」已恢复连接，QQ 侧消息恢复正常。\n\n{detail}\n\n时间：{time}",
-        "description": "恢复邮件正文模板，可用占位符 {platform_id} {status_text} {detail} {time}"
-    },
-    "email_retry_times": {
-        "type": "int",
-        "default": 2,
-        "description": "邮件发送失败后的最大重试次数"
-    },
-    "email_retry_interval": {
-        "type": "int",
-        "default": 5,
-        "description": "邮件重试间隔（秒）"
+    "advanced": {
+        "description": "高级设置",
+        "type": "object",
+        "items": {
+            "email_retry_times": {
+                "description": "发送失败重试次数",
+                "type": "int",
+                "default": 2,
+                "slider": {
+                    "min": 1,
+                    "max": 10,
+                    "step": 1
+                },
+                "hint": "邮件发送失败后的最大重试次数。"
+            },
+            "email_retry_interval": {
+                "description": "重试间隔（秒）",
+                "type": "int",
+                "default": 5,
+                "slider": {
+                    "min": 1,
+                    "max": 60,
+                    "step": 1
+                },
+                "hint": "两次发送尝试之间的等待时间。"
+            }
+        }
     }
 }
