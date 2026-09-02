@@ -1,0 +1,2 @@
+# astrbot_plugin_napcat_monitor
+用于监测napcat是否掉线
