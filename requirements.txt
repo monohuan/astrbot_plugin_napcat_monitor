@@ -1,0 +1,1 @@
+# 本插件仅使用 Python 标准库（smtplib / ssl / email），无需额外第三方依赖。

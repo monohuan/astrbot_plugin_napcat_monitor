@@ -1,0 +1,8 @@
+name: astrbot_plugin_napcat_monitor
+display_name: NapCat 掉线邮件通知
+desc: 监控 OneBot v11/NapCat 连接状态，在掉线或恢复后通过邮件通知管理员
+short_desc: NapCat 掉线后发邮件通知管理员
+author: Tyrkb
+repo: https://github.com/monohuan/astrbot_plugin_napcat_monitor
+version: 0.1.0
+astrbot_version: ">=4.15"

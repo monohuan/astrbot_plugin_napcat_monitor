@@ -1,0 +1,97 @@
+{
+    "target_platform_ids": {
+        "type": "text",
+        "default": "",
+        "description": "要监控的 aiocqhttp 平台 ID。每行或用英文逗号填写一个；留空表示监控全部 OneBot v11/NapCat 实例。"
+    },
+    "poll_interval_seconds": {
+        "type": "int",
+        "default": 5,
+        "description": "连接状态轮询间隔（秒）"
+    },
+    "offline_cooldown_seconds": {
+        "type": "int",
+        "default": 600,
+        "description": "同一平台相同状态的重复通知冷却时间（秒）"
+    },
+    "notify_recovery": {
+        "type": "bool",
+        "default": true,
+        "description": "NapCat 恢复连接后是否也发送邮件通知"
+    },
+    "smtp_host": {
+        "type": "text",
+        "default": "",
+        "description": "SMTP 服务器地址，例如 smtp.qq.com"
+    },
+    "smtp_port": {
+        "type": "int",
+        "default": 465,
+        "description": "SMTP 端口（465=SSL，587=STARTTLS）"
+    },
+    "smtp_user": {
+        "type": "text",
+        "default": "",
+        "description": "SMTP 登录账号（通常是发件邮箱）"
+    },
+    "smtp_password": {
+        "type": "text",
+        "default": "",
+        "description": "SMTP 授权码/密码"
+    },
+    "smtp_security": {
+        "type": "text",
+        "default": "ssl",
+        "description": "加密方式：ssl（465）/ starttls（587）/ none（明文，不推荐）"
+    },
+    "smtp_timeout": {
+        "type": "int",
+        "default": 15,
+        "description": "SMTP 连接超时（秒）"
+    },
+    "from_name": {
+        "type": "text",
+        "default": "",
+        "description": "发件人显示名称，留空则用 SMTP 账号"
+    },
+    "admin_emails": {
+        "type": "text",
+        "default": "",
+        "description": "管理员收件邮箱，多个用逗号或换行分隔"
+    },
+    "subject_prefix": {
+        "type": "text",
+        "default": "[AstrBot]",
+        "description": "邮件主题前缀"
+    },
+    "offline_subject_template": {
+        "type": "text",
+        "default": "NapCat 已断开连接（{platform_id}）",
+        "description": "掉线邮件主题模板，可用占位符 {platform_id} {status_text} {detail}"
+    },
+    "recovery_subject_template": {
+        "type": "text",
+        "default": "NapCat 已恢复连接（{platform_id}）",
+        "description": "恢复邮件主题模板，可用占位符 {platform_id} {status_text} {detail}"
+    },
+    "offline_template": {
+        "type": "text",
+        "default": "管理员您好，\n\nAstrBot 监控到 NapCat / OneBot v11 平台「{platform_id}」已断开连接，QQ 侧消息暂时可能收不到。\n\n{detail}\n\n时间：{time}",
+        "description": "掉线邮件正文模板，可用占位符 {platform_id} {status_text} {detail} {time}"
+    },
+    "recovery_template": {
+        "type": "text",
+        "default": "管理员您好，\n\nAstrBot 监控到 NapCat / OneBot v11 平台「{platform_id}」已恢复连接，QQ 侧消息恢复正常。\n\n{detail}\n\n时间：{time}",
+        "description": "恢复邮件正文模板，可用占位符 {platform_id} {status_text} {detail} {time}"
+    },
+    "email_retry_times": {
+        "type": "int",
+        "default": 2,
+        "description": "邮件发送失败后的最大重试次数"
+    },
+    "email_retry_interval": {
+        "type": "int",
+        "default": 5,
+        "description": "邮件重试间隔（秒）"
+    }
+}
